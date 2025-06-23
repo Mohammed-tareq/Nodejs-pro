@@ -1,15 +1,21 @@
 import express from "express";
-import env from "dotenv";
+import dotenv from "dotenv";
+import morgan from "morgan";
 
-env.config();
 const app = express();
-const port  = process.env.PORT;
+dotenv.config();
+const PORT  = process.env.PORT;
+if(process.env.NODE_ENV === "development"){
+    app.use(morgan("dev"))
+    console.log(`you are in ${process.env.NODE_ENV} mode`)
+}
+
 
 app.get("/",(req,res)=>{
     res.send("Hello World");
 })
 
 
-app.listen(8000,()=>{
-    console.log("server is running on port 8000");
+app.listen(PORT,()=>{
+    console.log(`server is run in port ${PORT}`);
 })
