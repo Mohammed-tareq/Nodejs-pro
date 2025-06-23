@@ -6,14 +6,14 @@ import AppError from "../../Utils/AppError.js";
 
 
 
-const deleteCategory = expressAsyncHandler(async (req, res) => {
+const deleteCategory = expressAsyncHandler(async (req, res,next) => {
 
     const {id} = req.params;
 
-    const category = await Category.findByIdAndDelete(id);
+    const category = await Category.findOneAndDelete({_id:id});
 
     if(!Category){
-         throw new  AppError(404,"Category not found");
+        return  next( new  AppError(404,"Category not found"));
     }
 
     res.status(200).json({

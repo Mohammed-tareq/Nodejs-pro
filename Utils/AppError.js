@@ -1,11 +1,13 @@
 
 class AppError extends Error {
-    constructor(status , message) {
-        this.status = status;
-        super(message);
-        Error.captureStackTrace(this , this.constructor)
+    constructor(statusCode,message) {
+        super(message); // ✅ أول حاجة تنادي على super()
+        this.statusCode = statusCode;
+        this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+        this.isOperational = true;
+
+        Error.captureStackTrace(this, this.constructor);
     }
 }
-
 
 export default AppError;

@@ -4,21 +4,21 @@ import Category from "../../Models/category.js";
 import slugify  from "slugify";
 
 
-const updateCategory = expressAsyncHandler(async (req, res) => {
+const updateCategory = expressAsyncHandler(async (req, res, next) => {
 
     const {id} = req.params;
     const {body} = req;
 
     if(!body.name){
-         throw new AppError(400, "Name is required");
+        return  next(new AppError(400, "Name is required"));
     }
 
-    const category = await  Category.findByIdAndUpdate(id , {
+    const category = await  Category.findOneAndUpdate({_id:id} , {
         name: body.name,
         slug: slugify(body.name),
-    },{new:true})
+    },{ new: true })
     if(!category){
-         throw new AppError(404, "Category not found");
+        return  next(new AppError(404, "Category not found"));
     }
 
 

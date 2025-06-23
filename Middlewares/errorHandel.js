@@ -1,18 +1,28 @@
 import AppError from "../Utils/AppError.js";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 export default (err, req, res, next) => {
+    const isDev = process.env.NODE_ENV === "development";
 
-    console.log(err.stack);
-    if (err instanceof AppError) {
-        return res.status(err.status).json({
-            status: "Failed",
-            message: err.message
+    if (isDev && err instanceof AppError) {
+        return res.status(err.statusCode).json({
+            status: err.status,
+            message: err.message,
+            isOperational: err.isOperational,
+            stack: err.stack,
         })
     }
 
+    if(err instanceof AppError){
+        return res.status(err.statusCode).json({
+            status: err.status,
+            message: err.message,
+        })
+    }
 
-    if (err.code === "11000" || err instanceof mongoose.mongo.MongoServerError && err.code === 11000) {
+    if (err instanceof mongoose.mongo.MongoServerError && err.code === 11000) {
         return res.status(400).json({
             status: "Failed",
             message: `Duplicate entry ${Object.keys(err.keyValue)[0]}`
@@ -27,4 +37,10 @@ export default (err, req, res, next) => {
             message: `Invalid Input : ${err.value}`
         })
     }
+
+    return res.status(500).json({
+        status: err.status,
+        message: "Internal Server Error",
+    })
+
 }

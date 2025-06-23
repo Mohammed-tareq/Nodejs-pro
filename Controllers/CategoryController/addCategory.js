@@ -4,11 +4,11 @@ import slugify from "slugify";
 import expressAsyncHandler from "express-async-handler";
 
 
-const addCategory = expressAsyncHandler(async (req, res) => {
+const addCategory = expressAsyncHandler(async (req, res,next) => {
 
     const { body } = req
     if (!body.name) {
-        throw new AppError(400, 'name is required')
+      return  next(  new AppError(400, 'name is required'))
     }
 
     const category = await Category.create({
@@ -17,7 +17,7 @@ const addCategory = expressAsyncHandler(async (req, res) => {
         image: body.image
     })
     if (!category) {
-        throw new AppError(400, 'category not added')
+       return  next( new AppError(400, 'category not added'))
     }
     res.status(201).json({
         status: "success",

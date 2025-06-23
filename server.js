@@ -4,6 +4,7 @@ import morgan from "morgan";
 import connectDB from "./DataBase/connectDB.js";
 import errorHandel from "./Middlewares/errorHandel.js";
 import categoryRouter from "./Router/category.js";
+import AppError from "./Utils/AppError.js";
 
 const app = express();
 app.use(express.json());
@@ -22,6 +23,9 @@ app.get("/",(req,res)=>{
 app.use("/api/v1/category" , categoryRouter)
 
 
+app.use((req,res,next)=>{
+    next(new AppError(404,`can't find this route ${req.originalUrl}`));
+})
 
 app.use(errorHandel)
 

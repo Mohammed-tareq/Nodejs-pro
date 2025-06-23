@@ -11,7 +11,7 @@ const getCategories = expressAsyncHandler(async (req, res, next) => {
 
     const categories = await Category.find().skip(skip).limit(limit);
     if (!categories) {
-        throw new AppError(404, "No Categories Found");
+        return next(new AppError(404, "No Categories Found"));
     }
 
     res.status(200).json({
