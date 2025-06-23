@@ -1,4 +1,4 @@
-import AppErorr from "../../Utils/AppErorr.js";
+import AppError from "../../Utils/AppError.js";
 import Category from "../../Models/category.js";
 import slugify from "slugify";
 import expressAsyncHandler from "express-async-handler";
@@ -8,7 +8,7 @@ const addCategory = expressAsyncHandler(async (req, res) => {
 
     const { body } = req
     if (!body.name) {
-        throw new AppErorr(400, 'name is required')
+        throw new AppError(400, 'name is required')
     }
 
     const category = await Category.create({
@@ -17,7 +17,7 @@ const addCategory = expressAsyncHandler(async (req, res) => {
         image: body.image
     })
     if (!category) {
-        throw new AppErorr(400, 'category not added')
+        throw new AppError(400, 'category not added')
     }
     res.status(201).json({
         status: "success",

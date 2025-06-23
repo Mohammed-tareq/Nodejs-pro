@@ -1,5 +1,5 @@
 import Category from "../../Models/category.js";
-import AppErorr from "../../Utils/AppErorr.js";
+import AppError from "../../Utils/AppError.js";
 import expressAsyncHandler from "express-async-handler";
 
 const getCategories = expressAsyncHandler(async (req, res, next) => {
@@ -11,7 +11,7 @@ const getCategories = expressAsyncHandler(async (req, res, next) => {
 
     const categories = await Category.find().skip(skip).limit(limit);
     if (!categories) {
-        throw new AppErorr(404, "No Categories Found");
+        throw new AppError(404, "No Categories Found");
     }
 
     res.status(200).json({

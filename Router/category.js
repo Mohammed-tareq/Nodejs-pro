@@ -7,5 +7,7 @@ const categoryRouter = Router();
 // categoryRouter.get("/" , categoryIndex.getCategories);
 // or DRY
 categoryRouter.route("/").get(categoryIndex.getCategories).post(categoryIndex.addCategory);
+categoryRouter.route("/:id").get(categoryIndex.getCategory).put(categoryIndex.updateCategory).delete(categoryIndex.deleteCategory);
+
 
 export default categoryRouter;
