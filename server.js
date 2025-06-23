@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./DataBase/connectDB.js";
+import errorHandel from "./Middlewares/errorHandel.js";
+import categoryRouter from "./Routes/categoryRouter.js";
 
 const app = express();
 dotenv.config();
@@ -16,7 +18,11 @@ if(process.env.NODE_ENV === "development"){
 app.get("/",(req,res)=>{
     res.send("Hello World");
 })
+app.use("/api/v1/category" , categoryRouter)
 
+
+
+app.use(errorHandel)
 
 app.listen(PORT,()=>{
     connectDB() // connect to database 
