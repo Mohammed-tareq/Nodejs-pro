@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import connectDB from "./DataBase/connectDB.js";
 
 const app = express();
 dotenv.config();
@@ -11,11 +12,13 @@ if(process.env.NODE_ENV === "development"){
 }
 
 
+// test route
 app.get("/",(req,res)=>{
     res.send("Hello World");
 })
 
 
 app.listen(PORT,()=>{
+    connectDB() // connect to database 
     console.log(`server is run in port ${PORT}`);
 })
