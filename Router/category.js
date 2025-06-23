@@ -6,6 +6,6 @@ const categoryRouter = Router();
 // categoryRouter.post("/" , categoryIndex.addCategory);
 // categoryRouter.get("/" , categoryIndex.getCategories);
 // or DRY
-categoryRouter.route("/").post(categoryIndex.addCategory).get(categoryIndex.getCategories);
+categoryRouter.route("/").get(categoryIndex.getCategories).post(categoryIndex.addCategory);
 
 export default categoryRouter;
