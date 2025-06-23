@@ -4,7 +4,7 @@ import Category from "../../Models/category.js";
 
 const addCategory = async (req, res, next) => {
     try {
-        const { name } = req.body
+        const { body} = req
         if (!body.name) {
             throw new AppErorr(400, 'name is required')
         }

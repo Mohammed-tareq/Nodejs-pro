@@ -6,6 +6,7 @@ import errorHandel from "./Middlewares/errorHandel.js";
 import categoryRouter from "./Router/category.js";
 
 const app = express();
+app.use(express.json());
 dotenv.config();
 const PORT  = process.env.PORT;
 if(process.env.NODE_ENV === "development"){
