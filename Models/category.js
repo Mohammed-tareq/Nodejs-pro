@@ -4,14 +4,23 @@ import mongoose from "mongoose";
 const categorySchma = new mongoose.Schema({
     name: {
         type: String,
-        require: true,
-    }
-},{timestamps:true})
+        require: [true, "Must Be Require"],
+        minlength: [3, "Too short Category Name"],
+        maxlength: [30, "Too long Category Name"],
+    },
 
-categorySchma.index({ name: 1 }, { unique: true });
 
+    slug: {
+        type: String,
+        lowercase: true
+    },
 
-const Category = mongoose.model("Category" , categorySchma)
+    image: String,
+}, { timestamps: true })
+
+categorySchma.index({ name: 1 }, { unique: true })
+
+const Category = mongoose.model("Category", categorySchma)
 
 
 export default Category;
