@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./DataBase/connectDB.js";
 import errorHandel from "./Middlewares/errorHandel.js";
-import categoryRouter from "./Routes/categoryRouter.js";
+import categoryRouter from "./Router/category.js";
 
 const app = express();
 dotenv.config();

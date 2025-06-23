@@ -1,4 +1,4 @@
-import addCategory from "../UserController/addCategory";
+import addCategory from "./addCategory.js";
 
 
 export default{
