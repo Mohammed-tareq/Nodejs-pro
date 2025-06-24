@@ -1,8 +1,22 @@
 import mongoose from "mongoose";
 
 const BrandSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        minlength:[3, "Too Short Brnad Name "]
-    }
-})
+    name: {
+        type: String,
+        minlength: [3, "Too Short Brnad Name "],
+        maxlength: [20, "Too Long Brnad Name "],
+        require: [true, "Must Be Require"]
+    },
+    slug: {
+        type: String,
+        lowercase: true
+    },
+
+    image: String,
+}, { timestamps: true })
+
+BrandSchema.index({ name: 1 }, { unique: true })
+
+const Brand = mongoose.model("Brand", BrandSchema)
+
+export default Brand;

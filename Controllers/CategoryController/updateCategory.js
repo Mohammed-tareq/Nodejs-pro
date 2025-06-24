@@ -16,6 +16,7 @@ const updateCategory = expressAsyncHandler(async (req, res, next) => {
     const category = await  Category.findOneAndUpdate({_id:id} , {
         name: body.name,
         slug: slugify(body.name),
+        image:body.image
     },{ new: true })
     if(!category){
         return  next(new AppError(404, "Category not found"));
