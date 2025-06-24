@@ -7,7 +7,7 @@ import { check } from "express-validator";
 const addSubCategoryValidator = [
     check("name").notEmpty().withMessage("Sub Category name is required")
         .isLength({min:3}).withMessage("Sub Category name must be at least 3 characters")
-        .isLength({max:20}).withMessage("Sub Category name must be less than 30 characters"),
+        .isLength({max:20}).withMessage("Sub Category name must be less than 20 characters"),
     check("category").isMongoId().withMessage("Invalid Category Id format"),
     validatorMiddleware
 ]

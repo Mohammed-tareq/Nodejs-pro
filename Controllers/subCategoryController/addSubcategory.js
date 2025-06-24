@@ -1,9 +1,15 @@
-import  mongoose  from "mongoose";
 import SubCategory from "../../Models/subCategory.js";
 import AppError from "../../Utils/AppError.js";
 import slugify from "slugify";
 import expressAsyncHandler from "express-async-handler";
 
+
+ export const setCategoryIdFormBody = (req, res, next) => {
+    if(!req.body.category){
+        req.body.category = req.params.categoryId;
+    }
+    next();
+}
 const addSubCategory = expressAsyncHandler(async (req, res, next) => {
     const {body} = req;
     // if(req.params.categoryId) body.category = req.params.categoryId;
