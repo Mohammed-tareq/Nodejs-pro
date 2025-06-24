@@ -10,7 +10,7 @@ const getCategories = expressAsyncHandler(async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const categories = await Category.find().skip(skip).limit(limit);
-    if (!categories) {
+    if (categories.length === 0) {
         return next(new AppError(404, "No Categories Found"));
     }
 
