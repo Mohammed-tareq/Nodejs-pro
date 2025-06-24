@@ -6,6 +6,7 @@ import expressAsyncHandler from "express-async-handler";
 
 const addSubCategory = expressAsyncHandler(async (req, res, next) => {
     const {body} = req;
+    // if(req.params.categoryId) body.category = req.params.categoryId;
     if(!body.name || !body.category){
         return next(new AppError(400, "Name and Category is required"))
     }
@@ -19,21 +20,16 @@ const addSubCategory = expressAsyncHandler(async (req, res, next) => {
     }
      subCategory = await subCategory.populate({
         path: 'category',
-         select: 'name'
+         select: 'name -_id'
      })
 
 
-    const response = {
-        name: subCategory.name,
-        slug: subCategory.slug,
-        categoryName: subCategory.category.name,
-        createdAt: subCategory.createdAt
-    }
+
 
     res.status(201).json({
         status: "success",
         message: "SubCategory added successfully",
-        data: response
+        data: subCategory
     })
 })
 

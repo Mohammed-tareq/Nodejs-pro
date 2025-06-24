@@ -8,11 +8,17 @@ const getSubCategories = expressAsyncHandler(async (req, res, next) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 12;
     const skip = (page - 1) * limit;
-    const subCategories = await SubCategory.find().skip(skip).limit(limit)
-        .populate({
-            path: 'category',
-            select: 'name'
-        });
+console.log(req.params);
+    let  filterCategoryById = {};
+    if (req.params.categoryId) filterCategoryById = { category: req.params.categoryId };
+
+
+
+    const subCategories = await SubCategory.find(filterCategoryById).skip(skip).limit(limit);
+        // .populate({
+        //     path: 'category',
+        //     select: 'name'
+        // });
     if (subCategories.length === 0) {
         return next(new AppError(404, "No Sub Categories Found"));
     }
