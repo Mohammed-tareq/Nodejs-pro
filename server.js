@@ -5,6 +5,7 @@ import connectDB from "./DataBase/connectDB.js";
 import errorHandel from "./Middlewares/errorHandel.js";
 import categoryRouter from "./Router/category.js";
 import AppError from "./Utils/AppError.js";
+import subCategoryRouter from "./Router/subCategory.js";
 
 const app = express();
 app.use(express.json());
@@ -16,11 +17,9 @@ if(process.env.NODE_ENV === "development"){
 }
 
 
-// test route
-app.get("/",(req,res)=>{
-    res.send("Hello World");
-})
+
 app.use("/api/v1/category" , categoryRouter)
+app.use("/api/v1/subCategory" , subCategoryRouter)
 
 
 app.use((req,res,next)=>{
@@ -29,7 +28,16 @@ app.use((req,res,next)=>{
 
 app.use(errorHandel)
 
-app.listen(PORT,()=>{
+const server = app.listen(PORT,()=>{
     connectDB() // connect to database 
     console.log(`server is run in port ${PORT}`);
+})
+
+
+//  for any error out of server or express like  lose connection to database or different error in promise functions
+process.on("unhandledRejection",(err,promise)=>{
+    console.error(`unhandledRejection error : ${err.message}`);
+    server.close(()=>{
+        process.exit(1);
+    })
 })

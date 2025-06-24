@@ -1,5 +1,7 @@
 import AppError from "../Utils/AppError.js";
 import mongoose from "mongoose";
+import {param , validationResult} from "express-validator";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -44,3 +46,7 @@ export default (err, req, res, next) => {
     })
 
 }
+
+
+
+
