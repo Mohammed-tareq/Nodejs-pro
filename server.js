@@ -20,7 +20,9 @@ if (process.env.NODE_ENV === "development") {
 
 
 app.use("/api/v1/category", categoryRouter)
-app.use("/api/v1/subCategory", subCategoryRouter)
+// app.use("/api/v1/subCategory", subCategoryRouter)
+// app.use('/:categoryId/subCategory', subCategoryRouter);
+
 
 
 app.use((req, res, next) => {

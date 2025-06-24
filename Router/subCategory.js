@@ -4,11 +4,7 @@ import {addSubCategoryValidator,getSubCategoryValidator,updateSubCategoryValidat
 
 const subCategoryRouter = Router({ mergeParams: true });
 
-// Debug middleware to log when subCategoryRouter is hit
-subCategoryRouter.use((req, res, next) => {
-  console.log("subCategoryRouter hit:", req.method, req.originalUrl);
-  next();
-});
+
 
 subCategoryRouter.route("/")
     .get(subCategoryIndex.getSubCategories)

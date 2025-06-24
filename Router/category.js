@@ -6,14 +6,11 @@ import subCategoryRouter from "./subCategory.js";
 const categoryRouter = Router();
 
 
+categoryRouter.use("/:categoryId/subCategory", subCategoryRouter);
 
 categoryRouter.route("/").get(categoryIndex.getCategories).post(createCategoryValidator,categoryIndex.addCategory);
 categoryRouter.route("/:id").get(getCategoryValidator,categoryIndex.getCategory).put(updateCategoryValidator,categoryIndex.updateCategory).delete(deleteCategoryValidator,categoryIndex.deleteCategory);
 
-categoryRouter.use("/:categoryId/subCategory", subCategoryRouter);
-categoryRouter.use((req, res, next) => {
-  console.log("categoryRouter hit:", req.method, req.originalUrl, req.params);
-  next();
-});
+
 
 export default categoryRouter;
