@@ -2,8 +2,7 @@ import {Router} from 'express';
 import subCategoryIndex from '../Controllers/subCategoryController/subCategoryIndex.js';
 import {addSubCategoryValidator,getSubCategoryValidator,updateSubCategoryValidator,deleteSubCategoryValidator } from '../Utils/subCategoryValidator.js';
 
-const subCategoryRouter = Router({ mergeParams: true });
-
+const subCategoryRouter = Router();
 
 
 subCategoryRouter.route("/")
