@@ -5,7 +5,10 @@ const BrandSchema = new mongoose.Schema({
         type: String,
         minlength: [3, "Too Short Brnad Name "],
         maxlength: [20, "Too Long Brnad Name "],
-        require: [true, "Must Be Require"]
+        require: [true, "Must Be Require"],
+        trim: true,
+
+
     },
     slug: {
         type: String,
