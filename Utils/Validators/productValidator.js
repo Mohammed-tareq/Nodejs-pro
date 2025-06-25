@@ -4,21 +4,30 @@ import AppError from "../../Utils/appError.js";
 import Category from "../../Models/category.js";
 import SubCategory from "../../Models/subCategory.js";
 import Brand from "../../Models/brand.js";
+import slugify from "slugify";
 
 const addProductValidator = [
   check("title")
-    .notEmpty()
-    .withMessage("Product name is required")
     .isLength({ min: 3 })
-    .withMessage("Product name must be at least 3 characters"),
+    .withMessage("must be at least 3 chars")
+    .notEmpty()
+    .withMessage("Product required")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   check("description")
     .notEmpty()
     .withMessage("Product description is required")
-    .isLength({ max: 350 })
-    .withMessage(" Too Long Product description must "),
+    .isLength({ max: 2000 })
+    .withMessage("Too long description"),
   check("quantity")
     .notEmpty()
     .withMessage("Product quantity is required")
+    .isNumeric()
+    .withMessage("Product quantity must be a number"),
+  check("sold")
+    .optional()
     .isNumeric()
     .withMessage("Product quantity must be a number"),
   check("price")
@@ -26,40 +35,29 @@ const addProductValidator = [
     .withMessage("Product price is required")
     .isNumeric()
     .withMessage("Product price must be a number")
-    .isLength({ max: 15 })
-    .withMessage(" Too Long Product price must be less than 15 characters"),
-  check("sold")
-    .isNumeric()
-    .withMessage("Product sold must be a number")
-    .optional(),
+    .isLength({ max: 32 })
+    .withMessage("To long price"),
   check("priceAfterDiscount")
+    .optional()
     .isNumeric()
     .withMessage("Product priceAfterDiscount must be a number")
-    .optional()
-    .isLength({ max: 15 })
-    .withMessage(
-      " Too Long Product priceAfterDiscount must be less than 15 characters"
-    )
     .toFloat()
     .custom((value, { req }) => {
-      if (value >= req.body.price) {
-        throw new Error(
-          "Product priceAfterDiscount must be less than product price"
-        );
+      if (req.body.price <= value) {
+        throw new Error("priceAfterDiscount must be lower than price");
       }
       return true;
     }),
+
   check("colors")
+    .optional()
     .isArray()
-    .withMessage("Product colors must be an array")
-    .optional(),
-  check("imageCover")
-    .notEmpty()
-    .withMessage("Product imageCover must be a string"),
+    .withMessage("availableColors should be array of string"),
+  check("imageCover").notEmpty().withMessage("Product imageCover is required"),
   check("images")
+    .optional()
     .isArray()
-    .withMessage("Product images must be an array")
-    .optional(),
+    .withMessage("images should be array of string"),
   check("category")
     .notEmpty()
     .withMessage("Product must be belong to a category")
@@ -74,63 +72,71 @@ const addProductValidator = [
         }
       })
     ),
-  check("subcategories")
+
+  check("subcategory")
     .optional()
     .isArray()
-    .withMessage("Subcategories must be an array of Mongo IDs")
-    .custom((subcategoriesIds) =>
-      SubCategory.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(
-        (result) => {
-          if (result.length < 1 || result.length !== subcategoriesIds.length) {
-            return Promise.reject(new Error(`Invalid subcategories Ids`));
-          }
-        }
-      )
-    )
-    .custom((val, { req }) =>
-      SubCategory.find({ category: req.body.category }).then(
-        (subcategories) => {
-          const subCategoriesIdsInDB = [];
-          subcategories.forEach((subCategory) => {
-            subCategoriesIdsInDB.push(subCategory._id.toString());
-          });
+    .withMessage("subcategory must be an array of IDs") // Updated message
+    .custom(async (subcategoryIds, { req }) => {
+      if (!subcategoryIds || subcategoryIds.length === 0) {
+        return true;
+      }
 
-          console.log(subCategoriesIdsInDB);
-          const checker = (target, arr) => target.every((v) => arr.includes(v));
-          if (!checker(val, subCategoriesIdsInDB)) {
-            return Promise.reject(
-              new Error(`subcategories not belong to category`)
-            );
-          }
-        }
-      )
-    ),
+      const invalidId = subcategoryIds.find(
+        (id) => !/^[0-9a-fA-F]{24}$/.test(id)
+      );
+      if (invalidId) {
+        throw new Error(`Invalid subcategory ID format: ${invalidId}`);
+      }
 
-  check("brand")
-    .isMongoId()
-    .withMessage("Invalid Brand Id format")
-    .optional()
-    .custom((id) =>
-      Brand.findById(id).then((data) => {
-        if (!data) {
-          return Promise.reject(
-            new AppError(404, `this Sub Category not found`)
-          );
-        }
-      })
-    ),
+      const foundSubcategories = await SubCategory.find({
+        _id: { $in: subcategoryIds },
+      });
+
+      if (foundSubcategories.length !== subcategoryIds.length) {
+        const foundIds = new Set(
+          foundSubcategories.map((sub) => sub._id.toString())
+        );
+        const missingIds = subcategoryIds.filter((id) => !foundIds.has(id));
+        throw new Error(
+          `One or more subcategory IDs are invalid or do not exist: ${missingIds.join(", ")}`
+        );
+      }
+
+      const categoryId = req.body.category;
+      if (!categoryId) {
+        throw new Error(
+          "Category must be provided for subcategory validation."
+        );
+      }
+      const categoryIdString = categoryId.toString(); // Ensure string comparison
+
+      const notBelong = foundSubcategories.find(
+        (subcat) => subcat.category.toString() !== categoryIdString
+      );
+
+      if (notBelong) {
+        throw new Error(
+          `Subcategory (${notBelong.name || notBelong._id}) does not belong to the specified category.`
+        );
+      }
+
+      return true;
+    }),
+
+  check("brand").optional().isMongoId().withMessage("Invalid ID formate"),
   check("ratingsAverage")
-    .isNumeric()
-    .withMessage("Product ratingsAverage must be a number")
     .optional()
-    .isLength({ max: 5 })
-    .withMessage(
-      " Too Long Product ratingsAverage must be less than 5 characters"
-    ),
-  check("ratingsQuantity")
     .isNumeric()
-    .withMessage("Product ratingsQuantity must be a number")
-    .optional(),
+    .withMessage("ratingsAverage must be a number")
+    .isLength({ min: 1 })
+    .withMessage("Rating must be above or equal 1.0")
+    .isLength({ max: 5 })
+    .withMessage("Rating must be below or equal 5.0"),
+  check("ratingsQuantity")
+    .optional()
+    .isNumeric()
+    .withMessage("ratingsQuantity must be a number"),
 
   validateMongoId,
 ];
