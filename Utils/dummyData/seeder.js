@@ -1,25 +1,24 @@
 import fs  from 'fs';
-import colors from 'colors';
 import dotenv from 'dotenv';
-import Product from '../../models/productModel.js';
-import connectDB from '../../config/database.js';
-
-
+import Product from '../../Models/product.js';
+import connectDB from '../../DataBase/connectDB.js';
+import colors from 'colors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
+connectDB();
 
-// connect to DB
-dbConnection();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Read data
-const products = JSON.parse(fs.readFileSync('./products.json'));
-
+const filePath = path.join(__dirname, 'product.json');
+const products = JSON.parse(fs.readFileSync(filePath));
 
 // Insert data into DB
 const insertData = async () => {
   try {
     await Product.create(products);
-
     console.log('Data Inserted'.green.inverse);
     process.exit();
   } catch (error) {
