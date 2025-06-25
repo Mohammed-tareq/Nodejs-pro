@@ -7,6 +7,7 @@ import categoryRouter from "./Router/category.js";
 import AppError from "./Utils/AppError.js";
 import subCategoryRouter from "./Router/subCategory.js";
 import brandRouter from "./Router/brand.js"
+import productRouter from "./Router/product.js"
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -21,6 +22,7 @@ if(process.env.NODE_ENV === "development"){
 app.use("/api/v1/category" , categoryRouter)
 app.use("/api/v1/subCategory" , subCategoryRouter)
 app.use("/api/v1/brand" , brandRouter)
+app.use("/api/v1/product" , productRouter)
 
 
 app.use((req,res,next)=>{

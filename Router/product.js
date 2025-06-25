@@ -1,31 +1,20 @@
 import { Router } from 'express';
 import productIndex from '../Controllers/ProductController/productIndex.js';
+import {addProductValidator , getProductValidator , updateProductValidator , deleteProductValidator} from '../Utils/Validators/productValidator.js'
 
 
 const productRouter = Router();
 
 
-
-
-
-
-
 productRouter.route('/')
-.get(productIndex.getAllproducts)
-.post(productIndex.addproduct);
+.get(productIndex.getAllProducts)
+.post(addProductValidator,productIndex.addproduct);
 
 
 productRouter.route("/:id")
-.get(productIndex.getproduct)
-.patch(productIndex.UpdateProduct)
-.delete(productIndex.deleteProduct);
-
-
-
-
-
-
-
+.get(getProductValidator,productIndex.getproduct)
+.patch(updateProductValidator,productIndex.UpdateProduct)
+.delete(deleteProductValidator,productIndex.deleteProduct);
 
 
 

@@ -4,23 +4,25 @@ import slugify from "slugify";
 import Product from "../../Models/product.js";
 
 
-const UpdateProduct = expressAsyncHandler ( async (req , res , next)=>{
+const UpdateProduct = expressAsyncHandler(async (req, res, next) => {
     const {id} = req.params;
     const {body} = req;
-    body.slug = slugify(body.title)
-    if (!body.title ) {
-        return next(new AppError(400, "Title required fields must be provided"));
-      }
-    
+    if (body.title) {
+        body.slug = slugify(body.title)
+    }
 
-    const product = await Product.findOneAndUpdate({_id:id},body,{new:true});
 
-    if(!product) next(new AppError(404 , "product Not Found"));
+    const product = await Product.findOneAndUpdate({_id: id}, body, {new: true}).populate({
+        path: "category",
+        select: "name -_id"
+    });
+
+    if (!product) next(new AppError(404, "product Not Found"));
 
     res.status(200).json({
-        status:"Success",
-        message:"Brand Updated",
-        data:product
+        status: "Success",
+        message: "product Updated",
+        data: product
     })
 
 

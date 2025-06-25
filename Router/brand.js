@@ -1,6 +1,6 @@
 import { Router } from "express";
 import brandIndex from "../Controllers/BrandController/brandIndex.js";
-import {addBrandsValidator , getBrandValidtor , updateBrandValidtor , deleteBrandValidtor} from "../Utils/brandValidator.js"
+import {addBrandsValidator , getBrandValidtor , updateBrandValidtor , deleteBrandValidtor} from "../Utils/Validators/brandValidator.js"
 
 
 const brandRouter = Router();

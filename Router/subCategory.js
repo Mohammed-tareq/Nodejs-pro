@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import subCategoryIndex from '../Controllers/subCategoryController/subCategoryIndex.js';
-import {addSubCategoryValidator,getSubCategoryValidator,updateSubCategoryValidator,deleteSubCategoryValidator } from '../Utils/subCategoryValidator.js';
+import {addSubCategoryValidator,getSubCategoryValidator,updateSubCategoryValidator,deleteSubCategoryValidator } from '../Utils/Validators/subCategoryValidator.js';
 import {setCategoryIdFormBody} from "../Controllers/subCategoryController/addSubcategory.js";
 import {createFilterObject} from "../Controllers/subCategoryController/getSubCategories.js";
 

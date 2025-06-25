@@ -30,6 +30,13 @@ export default (err, req, res, next) => {
         })
     }
 
+    if(err.name === "ValidationError"){
+        return res.status(400).json({
+            status: "Failed",
+            message: err.message,
+            errors: err.stack
+        })
+    }
 
 
     if (err.name === "CastError") {
@@ -42,6 +49,7 @@ export default (err, req, res, next) => {
     return res.status(500).json({
         status: err.status,
         message: "Internal Server Error",
+        err:err.stack
     })
 
 }

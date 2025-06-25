@@ -1,4 +1,4 @@
-import validatorMiddleware from "../Middlewares/validatorMiddleware.js";
+import validatorMiddleware from "../../Middlewares/validatorMiddleware.js";
 import { check } from "express-validator";
 
 

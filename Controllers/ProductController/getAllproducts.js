@@ -1,18 +1,18 @@
 import AppError from "../../Utils/AppError.js";
 import expressAsyncHandler from "express-async-handler";
-import Product from './../../Models/product';
+import Product from './../../Models/product.js';
 
 
 
 
 
-const getAllproducts = expressAsyncHandler( async (req,res,next)=>{
+const getAllProducts = expressAsyncHandler( async (req,res,next)=>{
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 8;
     const skip = (page - 1) * limit ; 
 
-    const product = await Product.find().skip(skip).limit(limit);
+    const product = await Product.find().skip(skip).limit(limit).populate({path:"category", select:"name -_id"});
 
     if(product.length === 0){
 
@@ -29,4 +29,4 @@ const getAllproducts = expressAsyncHandler( async (req,res,next)=>{
 })  
 
 
-export default getAllproducts;
+export default getAllProducts;

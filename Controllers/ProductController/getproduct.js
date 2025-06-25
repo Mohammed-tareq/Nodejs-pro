@@ -9,7 +9,7 @@ const getproduct = expressAsyncHandler ( async (req , res , next)=>{
     const {id} = req.params;
 
 
-    const product = await Product.findOne({_id:id});
+    const product = await Product.findOne({_id:id}).populate({path:"category",select:"name -_id"});
     if(!product){
         return next(new AppError(404 , "Product Not Found "));
     } 

@@ -12,7 +12,7 @@ const deleteProduct = expressAsyncHandler( async (req , res , next)=>{
 
     res.status(200).json({
         status:"Success",
-        message:"Brand Deleted Successfully",
+        message:"product  Deleted Successfully",
     })
 })
 
