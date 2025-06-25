@@ -5,9 +5,7 @@ import Category from "../../Models/category.js";
 import SubCategory from "../../Models/subCategory.js";
 import Brand from "../../Models/brand.js";
 
-
 const addProductValidator = [
-  logValidator,
   check("title")
     .notEmpty()
     .withMessage("Product name is required")
