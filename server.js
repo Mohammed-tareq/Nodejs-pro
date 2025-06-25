@@ -4,10 +4,10 @@ import morgan from "morgan";
 import connectDB from "./DataBase/connectDB.js";
 import errorHandel from "./Middlewares/errorHandel.js";
 import categoryRouter from "./Router/category.js";
-import AppError from "./Utils/AppError.js";
 import subCategoryRouter from "./Router/subCategory.js";
-import brandRouter from "./Router/brand.js"
-import productRouter from "./Router/product.js"
+import brandRouter from "./Router/brand.js";
+import AppError from "./Utils/AppError.js";
+import productRouter from "./Router/product.js";
 const app = express();
 app.use(express.json());
 dotenv.config();

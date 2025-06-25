@@ -16,7 +16,7 @@ const addCategory = expressAsyncHandler(async (req, res,next) => {
         slug: slugify(body.name),
         image: body.image
     })
-    if (!category.length ) {
+    if (!category ) {
        return  next( new AppError(400, 'category not added'))
     }
     res.status(201).json({
