@@ -3,7 +3,6 @@ import { check } from "express-validator";
 import AppError from "../../Utils/appError.js";
 import Category from "../../Models/category.js";
 import SubCategory from "../../Models/subCategory.js";
-import Brand from "../../Models/brand.js";
 import slugify from "slugify";
 
 const addProductValidator = [
